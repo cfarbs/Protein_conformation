@@ -1,4 +1,4 @@
-#Amino acid name, letter, code
+#Amino acid name, letter, code, number
 Isoleucine,I,ILE,1
 Valine,V,VAL,2
 Leucine,L,LEU,3
