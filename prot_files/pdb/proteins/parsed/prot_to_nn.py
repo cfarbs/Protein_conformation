@@ -7,11 +7,12 @@ from prot_to_num import amino_dict
 aa_dict = amino_dict()
 infilenam = input("PDB ID of protein to parse?")
 infilename = infilenam + ".pdb.gz.txt"
+#if id ends w/P, returns without p. i.e. 1a0p.pdb.gz.txt -> 1a0 (?)
 pdbID = infilename.strip(".pdb.gz.txt")
 infile = open(infilename,'r')
 #list to contain protein sequence
 protseq = []
-
+helinfo = []
 LineNumber = 0
 
 for line in infile:
@@ -50,12 +51,14 @@ for line in infile:
             finamino = data[3]
             finseq = data[4]
             lenhelix = data[5]
-            helinfo = (aa_dict[initamino], int(initseq), aa_dict[finamino], int(finseq), int(lenhelix))
+            heli = (aa_dict[initamino], int(initseq), aa_dict[finamino], int(finseq), int(lenhelix))
+            helinfo.append(heli)
     LineNumber += 1
 
 
 #print (protseq)
 #initialize amino acid digit list
+
 digitseq = []
 #change amino acids to numbers in a list.
 for aa in range(len(protseq)):
@@ -64,4 +67,9 @@ for aa in range(len(protseq)):
 print (pdbID)
 print (helinfo)
 print (digitseq)
+
+#dataset = digituple + helinfo
+#print(dataset)
+
+#PLAN: PRINT TO SEPARATE FILE; SEPARATE FILES OR ALL TOGETHER?
 infile.close()
