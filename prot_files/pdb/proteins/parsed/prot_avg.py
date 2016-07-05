@@ -1,9 +1,14 @@
 #!/usr/bin/env python
+import sys
 
-infilenam = input("PDB ID of protein to parse?")
-infilename = infilenam + ".pdb.gz.txt"
-#if id ends w/P, returns without p. i.e. 1a0p.pdb.gz.txt -> 1a0 (?)
-pdbID = infilename.strip(".pdb.gz.txt")
+for i in range(len(sys.argv)):
+    if sys.argv[i] == "-protseq":
+        infilename = sys.argv[i+1]
+    else:
+        pass
+
+
+#print (infilename)
 infile = open(infilename,'r')
 
 value = 0
@@ -32,4 +37,7 @@ for line in infile:
 
 infile.close()
 
-print (value/numhelix)
+try:
+    print (value/numhelix)
+except ZeroDivisionError:
+    pass
