@@ -2,6 +2,18 @@
 
 #script to convert parsed data into useable format
 from prot_to_num import amino_dict
+import collections
+import itertools
+
+def reverse_enumerate(iterable):
+    """
+    Enumerate over an iterable in reverse order while retaining proper indexes
+    """
+    return zip(reversed(range(len(iterable)+1)), reversed(iterable))
+
+
+
+
 
 
 aa_dict = amino_dict()
@@ -12,7 +24,7 @@ pdbID = infilename.strip(".pdb.gz.txt")
 infile = open(infilename,'r')
 #list to contain protein sequence
 protseq = []
-helinfo = {}
+helinfo = collections.OrderedDict()
 LineNumber = 0
 lenhelix = 0
 
@@ -45,16 +57,19 @@ for line in infile:
                     protseq += fildata
                     #print (protseq)
         else:
-            #parse helix info
-            #print (data)
-            helixnum = data[0]
-            initamino = data[1]
-            initseq = data[2]
-            finamino = data[3]
-            finseq = data[4]
-            lenhelix = data[5]
-            heli = [int(initseq), int(finseq), int(lenhelix)]
-            helinfo[helixnum] = heli
+            if len(data[0]) <= 3:
+                #parse helix info
+                #print (data)
+                helixnum = data[0]
+                initamino = data[1]
+                initseq = data[2]
+                finamino = data[3]
+                finseq = data[4]
+                lenhelix = data[5]
+                heli = [int(initseq), int(finseq), int(lenhelix), initamino]
+                helinfo[helixnum] = heli
+            else:
+                pass
 
 
 
@@ -71,12 +86,49 @@ digitseq = []
 for aa in range(len(protseq)):
     digitseq.append(int(str(aa_dict[protseq[aa]])))
 
+revseq = (list(reverse_enumerate(protseq)))
+
+#print (type(helinfo))
+for helix in helinfo.keys():
+    helength = helinfo[helix][2]
+    if helength >= 12:
+        initpos = helinfo[helix][0]
+        finalpos = helinfo[helix][1]
+        initaa = helinfo[helix][3]
+        #print (helinfo[helix][2])
+        for count, acids in enumerate(protseq, 1):
+            if count == initpos:
+                #print (initpos)
+                #print (helinfo[helix][3])
+                templist = protseq[:initpos]
+                temprev = list(reversed(templist))
+                print (templist)
+                for counts, aa in enumerate(temprev):
+                    if temprev[counts] == initaa:
+                        #print (protseq[counts])
+                        pass
+                #for counts, aa in enumerate(reversed(protseq[:count])):
+                    #if protseq[counts] == helinfo[helix][3]:
+                        #print (initamino)
+                        #pass
+
+
+
+    else:
+        pass
 #print (pdbID)
 #print (helinfo)
 #print (digitseq)
 
 #dataset = digituple + helinfo
 #print(dataset)
+
+"""if protseq(acids) == helinfo[helix][3]:
+    helistring = protseq[acids:acids+helinfo[helix][2]]
+    print (helistring)"""
+
+"""for residue in range(len(protseq)):
+        if protein[residue]=="""
 
 #PLAN: PRINT TO SEPARATE FILE; SEPARATE FILES OR ALL TOGETHER?
 infile.close()
