@@ -12,8 +12,10 @@ pdbID = infilename.strip(".pdb.gz.txt")
 infile = open(infilename,'r')
 #list to contain protein sequence
 protseq = []
-helinfo = []
+helinfo = {}
 LineNumber = 0
+lenhelix = 0
+
 
 for line in infile:
     if(LineNumber>0):
@@ -51,12 +53,17 @@ for line in infile:
             finamino = data[3]
             finseq = data[4]
             lenhelix = data[5]
-            heli = (aa_dict[initamino], int(initseq), aa_dict[finamino], int(finseq), int(lenhelix))
-            helinfo.append(heli)
+            heli = [int(initseq), int(finseq), int(lenhelix)]
+            helinfo[helixnum] = heli
+
+
+
     LineNumber += 1
 
 
-#print (protseq)
+
+
+
 #initialize amino acid digit list
 
 digitseq = []
@@ -64,9 +71,9 @@ digitseq = []
 for aa in range(len(protseq)):
     digitseq.append(int(str(aa_dict[protseq[aa]])))
 
-print (pdbID)
-print (helinfo)
-print (digitseq)
+#print (pdbID)
+#print (helinfo)
+#print (digitseq)
 
 #dataset = digituple + helinfo
 #print(dataset)
