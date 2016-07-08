@@ -1,4 +1,5 @@
 #Amino acid name, letter, code, number
+Unknown,,UNK,0
 Isoleucine,I,ILE,1
 Valine,V,VAL,2
 Leucine,L,LEU,3
