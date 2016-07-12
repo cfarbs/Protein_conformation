@@ -12,8 +12,8 @@ Data are retrieved from len=12_helices.pkl and len=12_rand.pkl
 
 """
 def load_helix(split):
-    X = pickle.load(open("lib/helices.pkl","rb"))
-    y = pickle.load(open("lib/randhelices.pkl","rb"))
+    X = pickle.load(open("lib/no_feat_helices.pkl","rb"))
+    y = pickle.load(open("lib/no_feat_randhelices.pkl","rb"))
     dataset = X + y
     shuffle(dataset)
     split_point = int(len(X) * split)

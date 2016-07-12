@@ -34,10 +34,10 @@ def predict(test_data, true_labels, batch_size, model, model_file=None):
                                 )
     errors = [error_fcn(test_data[x * batch_size: (x + 1) * batch_size],
                         true_labels[x * batch_size: (x + 1) * batch_size])
-              for x in xrange(n_test_batches)]
+              for x in range(n_test_batches)]
 
     probs = [prob_fcn(test_data[x * batch_size: (x + 1) * batch_size])
-             for x in xrange(n_test_batches)]
+             for x in range(n_test_batches)]
 
     probs = list(chain(*probs))
 
@@ -63,7 +63,7 @@ def classify_with_network3(
         # alignment files
         group_1, group_2, group_3,  # these arguments should be strings that are used as the file suffix
         # which data to use
-        strand, motif_start_positions, preprocess, events_per_pos, feature_set, title,
+        motif_start_positions, preprocess, events_per_pos, feature_set, title,
         # training params
         learning_algorithm, train_test_split, iterations, epochs, max_samples, batch_size,
         # model params
@@ -84,13 +84,11 @@ def classify_with_network3(
     collect_data_vectors_args = {
         "events_per_pos": events_per_pos,
         "portion": train_test_split,
-        "strand": strand,
         "max_samples": max_samples,
         "feature_set": feature_set,
-        "kmer_length": 6
     }
 
-    for i in xrange(iterations):
+    for i in range(iterations):
         list_of_datasets = []  # [((g1, g1l), (xg1, xg1l), (tg1, tg1l)), ... ]
         add_to_list = list_of_datasets.append
         for n, group in enumerate((group_1, group_2, group_3)):
@@ -211,7 +209,7 @@ def classify_with_network2(
         # alignment files
         group_1, group_2, group_3,
         # which data to use
-        strand, motif_start_positions, preprocess, events_per_pos, feature_set, title,
+        motif_start_positions, preprocess, events_per_pos, feature_set, title,
         # training params
         learning_algorithm, train_test_split, iterations, epochs, max_samples, batch_size,
         # model params
@@ -233,13 +231,12 @@ def classify_with_network2(
     collect_data_vectors_args = {
         "events_per_pos": events_per_pos,
         "portion": train_test_split,
-        "strand": strand,
         "max_samples": max_samples,
         "feature_set": feature_set,
         "kmer_length": 6
     }
 
-    for i in xrange(iterations):
+    for i in range(iterations):
         list_of_datasets = []  # [((g1, g1l), (xg1, xg1l), (tg1, tg1l)), ... ]
         add_to_list = list_of_datasets.append
         for n, group in enumerate((group_1, group_2)):
@@ -334,7 +331,7 @@ def classify_with_network2(
 def test_error_distribution3(# alignment files
         group_1, group_2, group_3,  # these arguments should be strings that are used as the file suffix
         # which data to use
-        strand, motif_start_positions, preprocess, events_per_pos, feature_set, title,
+        motif_start_positions, preprocess, events_per_pos, feature_set, title,
         # training params
         learning_algorithm, train_test_split, iterations, epochs, max_samples, batch_size,
         # model params
@@ -355,7 +352,6 @@ def test_error_distribution3(# alignment files
     collect_data_vectors_args = {
         "events_per_pos": events_per_pos,
         "portion": train_test_split,
-        "strand": strand,
         "max_samples": max_samples,
         "feature_set": feature_set,
         "kmer_length": 6,
