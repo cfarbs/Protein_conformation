@@ -20,3 +20,5 @@ def load_normal(split):
     split_point = int(len(X) * split)
     xtrain_split = int(split_point + 0.5 * (1 - split) * len(X))
     return dataset[:split_point], dataset[split_point:xtrain_split], dataset[xtrain_split:]
+
+a, b, c = load_normal(0.7)

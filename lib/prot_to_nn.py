@@ -1,13 +1,15 @@
 #!/usr/bin/env python
-
 #script to convert parsed data into useable format
-
 #imports amino acid to number dictionary
 from prot_to_num import amino_dict
+from aa_feature_dict import feature_dict
 #required for order dictionary creation
 import collections
 import glob
 import os
+import pickle
+import numpy as np
+from random import shuffle
 #find that AA, by Art
 def find_it(start, search_length, b_target, e_target, target_len, arr):
     for _ in range(start, (start - search_length), -1):
@@ -22,14 +24,14 @@ def find_it(start, search_length, b_target, e_target, target_len, arr):
         except:
             pass
 
-Outfilename = "ParseErrors.txt"
-OutFile = open(Outfilename, 'w')
+#Outfilename = "helices.txt"
+#OutFile = open(Outfilename, 'w')
 #local variable to store amino acid dictionary
 aa_dict = amino_dict()
-
-filelist = sorted(glob.glob('./*.pdb.gz.txt'))
-
-#filecount = 0
+f_dict = feature_dict()
+digithelix = []
+filelist = sorted(glob.glob('C:/Users/Charlie/Documents/Grad Related/REU 2016/Methylation/Protein conformation/prot_files/pdb/proteins/parsed/*.pdb.gz.txt'))
+filecount = 0
 for name in filelist:
     infile = open(name, 'r')
     errorlist=[]
@@ -68,8 +70,6 @@ for name in filelist:
                     else:
                         fildata = list(filter(None, data))
                         protseq += fildata
-                if len(data[0]) == 1 or 2:
-                    seqerrors +=1
             else:
                 if len(data[0]) <= 3:
                     #parse helix info
@@ -109,38 +109,78 @@ for name in filelist:
     #list to store amino acids converted to numbers
     digitseq = []
     #change amino acids to numbers in a list.
-    for aa in range(len(protseq)):
-        digitseq.append(int(str(aa_dict[protseq[aa]])))
+    try:
+        for aa in range(len(protseq)):
+            digitseq.append(int(str(aa_dict[protseq[aa]])))
+    except KeyError:
+        #infile.close()
+        #os.remove(pdbID + ".pdb.gz.txt")
+        #print ("Removed %s" % (pdbID))
+        #break
+        pass
 
 
-    digithelix = []
+    if len(digitseq) != len(protseq):
+        seqerrors+=1
 
+
+    #print (pdbID)
     for count, aa in enumerate(helist):
+        tempdigi = []
+        tempfeat = []
         try:
-            tempdigi = []
             aastring = aa.split(" ")
             aashort = aastring[:12]
             for residue in range(len(aashort)):
-                tempdigi.append(aa_dict[aashort[residue]])
-                if len(tempdigi) == len(aashort):
-                    digithelix.append(tempdigi)
-        except:
+                try:
+                    tempdigi.append(f_dict[aa_dict[aashort[residue]]])
+                    if len(tempdigi) == len(aashort):
+                        digithelix.append(tempdigi)
+                except KeyError:
+                    #infile.close()
+                    #os.remove(pdbID + ".pdb.gz.txt")
+                    #print ("Removed %s" % (pdbID))
+                    #break
+                    pass
+        except AttributeError:
+            #infile.close()
+            #os.remove(pdbID + ".pdb.gz.txt")
+            #print ("Removed %s" % (pdbID))
+            #break
+            pass
+
+
+        #except:
             #print ("Something is wrong with %s's helices" % (pdbID))
-            helix2numerrors += 1
+            #helix2numerrors += 1
 
     infile.close()
+    filecount+=1
+    if seqerrors or helixerrors or helisterrors or helix2numerrors > 0:
+        outstring = "%s Sequence Parse Errors: %d; Helix Parse Errors: %d; Helix Extraction Errors: %d; Helix to Digit Errors: %d" % (pdbID, seqerrors, helixerrors, helisterrors, helix2numerrors)
+    else:
+        outstring = "%s is ready to go (probably)" % (pdbID)
+    #OutFile.write(outstring + "\n")
 
-    outstring = "%s Sequence Parse Errors: %d; Helix Parse Errors: %d; Helix Extraction Errors: %d; Helix to Digit Errors: %d" % (pdbID, seqerrors, helixerrors, helisterrors, helix2numerrors)
-    OutFile.write(outstring + "\n")
-    #try:
+Hsamples = [0] * 33113
+data = list(zip(digithelix[:300],Hsamples[:300]))
+pickle.dump(data,open("helices.pkl","wb"))
+#OutFile.close()
 
-        #print (pdbID)
-        #print (helinfo)
-        #print (digitseq)
-        #print (digithelix)
-    #except:
-        #pass
-#print (filecount)
 
-OutFile.close()
+RNG = np.random.RandomState()
+NonHsamples = [1] * 33113
+randseq = []
+for line in range(33113):
+    nothelix = np.random.randint(1,23,size=12)
+    randseq.append(nothelix)
+
+
+
+randdata = list(zip(randseq[:300],NonHsamples[:300]))
+pickle.dump(randdata, open("randhelices.pkl","wb"))
+
+
+
+
 #PLAN: PRINT TO SEPARATE FILE; SEPARATE FILES OR ALL TOGETHER?

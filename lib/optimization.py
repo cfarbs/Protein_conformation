@@ -142,7 +142,7 @@ def mini_batch_sgd(motif, train_data, labels, xTrain_data, xTrain_targets,
         "best_model": best_model
     }
     if trained_model_dir is not None:
-        with open("{}summary_stats.pkl".format(trained_model_dir), 'w') as f:
+        with open("{}summary_stats.pkl".format(trained_model_dir), 'wb') as f:
             cPickle.dump(summary, f)
 
     return net, summary
