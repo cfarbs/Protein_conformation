@@ -15,7 +15,7 @@ j = {
     "helixdict" : dict([('choose',None),('rand',True),('args',False)])
 }
 
-pickle.dump(j,open("C:/Users/Charlie/Documents/Grad_Related/REU_2016/Methylation/Protein_conformation/config/defaultrandom.pkl",'wb'))
+pickle.dump(j,open("config/defaultrandom.pkl",'wb'))
 ###################################################
 
 ###################################################
@@ -25,7 +25,7 @@ j = {
     "model_type": "twoLayer",
     "helixdict" : dict([('choose',[3,6,13]),('rand',False),('args',True)])
 }
-pickle.dump(j,open("C:/Users/Charlie/Documents/Grad_Related/REU_2016/Methylation/Protein_conformation/config/aminehydrolost.pkl",'wb'))
+pickle.dump(j,open("config/aminehydrolost.pkl",'wb'))
 
 ###################################################
 j = {
@@ -34,7 +34,7 @@ j = {
     "model_type": "twoLayer",
     "helixdict" : dict([('choose',[6]),('rand',False),('args',True)])
 }
-pickle.dump(j,open("C:/Users/Charlie/Documents/Grad_Related/REU_2016/Methylation/Protein_conformation/config/hydro.pkl",'wb'))
+pickle.dump(j,open("config/hydro.pkl",'wb'))
 
 ###################################################
 j = {
@@ -52,7 +52,7 @@ for m in choices:
     d['rand'] = False
     d['args'] = True
     j['helixdict'].append(d)
-pickle.dump(j,open("C:/Users/Charlie/Documents/Grad_Related/REU_2016/Methylation/Protein_conformation/config/combos.pkl",'wb'))
+pickle.dump(j,open("config/combos.pkl",'wb'))
 
 
 ###################################################

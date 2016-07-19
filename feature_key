@@ -6,6 +6,7 @@
     #    5: Number of carbon atoms in amino acid
     #    6: Number of hydrogen atoms in amino acid zwitterion
     #    7: Number of nitrogen atoms in amino acid
+    #    8: Number of oxygens in amino acid
     #    9: Number of sulfur atoms in amino acid
     #   10: Area in the standard state (standard state accessibiity
     #       is defined as the Average surface area that residue
