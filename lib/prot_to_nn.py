@@ -161,7 +161,7 @@ for name in filelist:
     #OutFile.write(outstring + "\n")
 
 #Hsamples = [0] * 33113
-data = digithelix[:300]
+data = digithelix[:1000]
 pickle.dump(data,open("helices.pkl","wb"))
 
 
@@ -178,6 +178,6 @@ for line in range(len(filelist)):
             #tempcomp = [x for t in temprand for x in t]
             #randseq.append(tempcomp)
 
-randdata = randseq[:300]
+randdata = randseq[:1000]
 #print (randdata[100])
 pickle.dump(randdata, open("randhelices.pkl","wb"))

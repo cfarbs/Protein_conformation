@@ -12,9 +12,15 @@ j = {
     "experiment_name": "default_random",
     "hidden_dim": [10],
     "model_type": "twoLayer",
-    "helixdict" : dict([('choose',None),('rand',True),('args',False)])
+    "helixdict" : []
 }
-
+for m in range(10):
+    d = dict()
+    d['title'] = "default_random"
+    d['choose'] = None
+    d['rand'] = True
+    d['args'] = False
+    j['helixdict'].append(d)
 pickle.dump(j,open("config/defaultrandom.pkl",'wb'))
 ###################################################
 

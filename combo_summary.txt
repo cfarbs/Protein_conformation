@@ -1818,3 +1818,22 @@
 (11, 12, 14, 15): 48.064516129032256 test accuracy.
 (11, 13, 14, 15): 52.903225806451616 test accuracy.
 (12, 13, 14, 15): 48.38709677419354 test accuracy.
+default_random: 50.645161290322584 test accuracy.
+default_random: 50.0 test accuracy.
+default_random: 47.41935483870967 test accuracy.
+default_random: 50.64516129032257 test accuracy.
+default_random: 54.83870967741936 test accuracy.
+default_random: 50.32258064516129 test accuracy.
+default_random: 49.67741935483871 test accuracy.
+default_random: 71.93548387096773 test accuracy.
+default_random: 49.35483870967743 test accuracy.
+default_random: 68.38709677419355 test accuracy.
+default_random: 51.93548387096774 test accuracy.
+default_random: 49.67741935483871 test accuracy.
+default_random: 65.80645161290322 test accuracy.
+default_random: 66.45161290322581 test accuracy.
+default_random: 48.064516129032256 test accuracy.
+default_random: 67.4193548387097 test accuracy.
+default_random: 47.74193548387097 test accuracy.
+default_random: 49.354838709677416 test accuracy.
+default_random: 47.41935483870967 test accuracy.
