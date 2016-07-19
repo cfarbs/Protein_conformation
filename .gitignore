@@ -46,3 +46,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.gz
+/combo_models/
+/combo_train_graphs/
+/best_models/

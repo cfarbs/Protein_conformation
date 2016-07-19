@@ -1,4 +1,4 @@
-#Amino acid name, letter, code
+#Amino acid name, letter, code, number
 Isoleucine,I,ILE,1
 Valine,V,VAL,2
 Leucine,L,LEU,3
@@ -19,4 +19,3 @@ Aspartic acid,D,ASP,17
 Asparagine,N,ASN,18
 Lysine,K,LYS,19
 Arginine,R,ARG,20
-Selenocysteine,U,SEC,21

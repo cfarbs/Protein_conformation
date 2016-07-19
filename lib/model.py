@@ -33,7 +33,7 @@ class Model(object):
         """Write model to file, using cPickle
         file_path: string, path to and including file to be written
         """
-        f = open(file_path, 'w')
+        f = open(file_path, 'wb')
         d = {
             "model": self.__class__,
             "in_dim": self.in_dim,
@@ -51,7 +51,7 @@ class Model(object):
          file_path: string, file to and including model file
         """
         if file_path is not None:
-            f = open(file_path, 'r')
+            f = open(file_path, 'rb')
             d = cPickle.load(f)
         else:
             assert(model_obj is not None), "need to provide file or dict with model params"
