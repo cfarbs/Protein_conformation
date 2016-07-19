@@ -3,13 +3,46 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 
-results = pickle.load(open("helix_summary_stats.pkl","rb"))
-epochs = np.arange(0,1000,100)
-#print (results["xtrain_errors"][11])
+#infile = input("enter the set of features from the combo tests to examine")
+#infilestr=str(infile)
+#print (type(infilestr))
 
-plt.plot(epochs, results['train_accuracies'])
-plt.plot(epochs, results['xtrain_accuracies'])
+epochs = np.arange(0,5000,500)
+savedir = "combo_train_graphs/"
+data = pickle.load(open("combo_80.pkl","rb"))
+for info in data:
+    infilestr = info[0]
+    acc = str(info[1])
+    results = pickle.load(open("combo_models/"+infilestr+"_Models/summary_stats.pkl","rb"))
+    error = pickle.load(open("combo_models/"+infilestr+"_Models/test_probs.pkl","rb"))
+    train_accuracies = (results['train_accuracies'])
+    xtrain_accuracies = (results['xtrain_accuracies'])
+    plt.figure()
+    plt.plot(epochs, results['train_accuracies'])
+    plt.plot(epochs, results['xtrain_accuracies'])
+    plt.ylabel("Accuracy of Train/Xtrain")
+    plt.xlabel("Epochs")
+    plt.title("Accuracy Plot for "+infilestr+" "+"Test Accuracy: "+acc)
+    plt.legend(['Training Accuracies', 'Xtrain Accuracies'], loc = 'lower right')
+    plt.savefig(savedir+infilestr+".png")
 
-plt.legend(['Training Accuracies', 'Xtrain Accuracies'], loc = 'upper left')
 
-#plt.show()
+
+
+
+#feats = (results["features"])
+#bestmodel =  (results['best_model'])
+
+#xtrain_errors = (results["xtrain_errors"])
+
+
+#outfile = "testdefault_random_Models/statsummary.txt"
+#owtfile = open(outfile, "a")
+#outstatement = ("{0},{1},{2},{3},{4}\n".format(feats, bestmodel, train_accuracies, xtrain_accuracies,xtrain_errors))
+#owtfile.write(outstatement)
+#owtfile.close()
+
+#Order of data in file:
+#test accuracy,feature1,feature2,feature3,feature4,bestmodel,
+#training accuracy, xtrain accuracy, xtrain error
+#

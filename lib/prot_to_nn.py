@@ -3,7 +3,6 @@
 
 #imports amino acid to number dictionary
 from prot_to_num import amino_dict
-from aa_feature_dict import feature_dict
 #required for order dictionary creation
 import collections
 import glob
@@ -28,9 +27,8 @@ def find_it(start, search_length, b_target, e_target, target_len, arr):
 
 #local variable to store amino acid dictionary
 aa_dict = amino_dict()
-f_dict = feature_dict()
 digithelix = []
-filelist = sorted(glob.glob('C:/Users/Charlie/Documents/Grad Related/REU 2016/Methylation/Protein conformation/prot_files/pdb/proteins/parsed/*.pdb.gz.txt'))
+filelist = sorted(glob.glob('C:/Users/Charlie/Documents/Grad_Related/REU_2016/Methylation/Protein_conformation/prot_files/pdb/proteins/parsed/*.pdb.gz.txt'))
 #filecount = 0
 for name in filelist:
     infile = open(name, 'r')
@@ -130,11 +128,12 @@ for name in filelist:
             aashort = aastring[:12]
             for residue in range(len(aashort)):
                 try:
-                    tempdigi.append(f_dict[aa_dict[aashort[residue]]])
-                    #tempdigi.append(aa_dict[aashort[residue]])
+                    #tempdigi.append(f_dict[aa_dict[aashort[residue]]])
+                    tempdigi.append(aa_dict[aashort[residue]])
                     if len(tempdigi) == len(aashort):
-                        temphel = [x for t in tempdigi for x in t]
-                        digithelix.append(temphel)
+                        #temphel = [x for t in tempdigi for x in t]
+                        #digithelix.append(temphel)
+                        digithelix.append(tempdigi)
                 except KeyError:
                     #infile.close()
                     #os.remove(pdbID + ".pdb.gz.txt")
@@ -161,23 +160,24 @@ for name in filelist:
         #outstring = "%s is ready to go (probably)" % (pdbID)
     #OutFile.write(outstring + "\n")
 
-Hsamples = [0] * 33113
-data = list(zip(digithelix[:300],Hsamples[:300]))
+#Hsamples = [0] * 33113
+data = digithelix[:300]
 pickle.dump(data,open("helices.pkl","wb"))
-#OutFile.close()
-print (data[100])
+
 
 RNG = np.random.RandomState()
-NonHsamples = [1] * 33113
+NonHsamples = [1] * len(filelist)
 randseq = []
-for line in range(33113):
+for line in range(len(filelist)):
     temprand=[]
     nothelix = np.random.randint(1,21,size=12)
-    for num in range(len(nothelix)):
-        temprand.append((f_dict[nothelix[num]]))
-        if len(temprand) == len(nothelix):
-            tempcomp = [x for t in temprand for x in t]
-            randseq.append(tempcomp)
+    randseq.append(nothelix)
+    #for num in range(len(nothelix)):
+        #temprand.append((f_dict[nothelix[num]]))
+        #if len(temprand) == len(nothelix):
+            #tempcomp = [x for t in temprand for x in t]
+            #randseq.append(tempcomp)
 
-randdata = list(zip(randseq[:300],NonHsamples[:300]))
+randdata = randseq[:300]
+#print (randdata[100])
 pickle.dump(randdata, open("randhelices.pkl","wb"))

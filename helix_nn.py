@@ -20,7 +20,7 @@ class HelixNetwork(unittest.TestCase):
                                       xTrain_data=self.xtr, xTrain_targets=self.xtr_l,
                                       learning_rate=0.001, L1_reg=0.0, L2_reg=0.0, epochs=epochs,
                                       batch_size=batch_size, hidden_dim=hidden_dim, model_type=model_type,
-                                      model_file=None, trained_model_dir="helix_", verbose=verbose, extra_args=extra_args)
+                                      model_file=None, trained_model_dir=None, verbose=verbose, extra_args=extra_args)
         #self.assertTrue(results['batch_costs'][1] > results['batch_costs'][-1])
         #self.assertTrue(results['xtrain_accuracies'][1] < results['xtrain_accuracies'][-1])
     def StartingNN(self):

@@ -2,29 +2,18 @@
 
 import sys
 import pickle
-from lib.neural_network import classify_with_network3, classify_with_network2
+from lib.helix_neural_network import classify_with_network2
 from argparse import ArgumentParser
 from multiprocessing import Process, current_process, Manager
+
 
 def parse_args():
     parser = ArgumentParser(description=__doc__)
 
-    #query files
-    parser.add_argument('--group_1','-1',action = 'store',
-                        dest = 'group_1', required=True, type=str,
-                        default=None,help="group 1 files")
-    parser.add_argument('--group_2', '-2', action='store',
-                        dest='group_2', required=True, type=str, default=None,
-                        help="group 2 files")
-    parser.add_argument('--group_3', '-3', action='store',
-                        dest='group_3', required=False, type=str, default=None,
-                        help="group_3 files")
-    #NEED TO MAKE A CONFIG FILE!
     parser.add_argument('--config_file', '-c', action='store', type=str, dest='config',
                         required=True, help='config file (pickle)')
-    #############
-    parser.add_argument('-nb_files', '-nb', action='store', dest='nb_files', required=False,
-                        default=50, type=int, help="maximum number of reads to use")
+    parser.add_argument('--model_dir', action='store', type=str, dest='model_file', required=False,
+                        default=None, help="directory with models")
     parser.add_argument('--jobs', '-j', action='store', dest='jobs', required=False,
                         default=4, type=int, help="number of jobs to run concurrently")
     parser.add_argument('--iter', '-i', action='store', dest='iter', required=False,
@@ -48,16 +37,10 @@ def parse_args():
     parser.add_argument('--output_location', '-o', action='store', dest='out',
                         required=True, type=str, default=None,
                         help="directory to put results")
+
     args = parser.parse_args()
+    print (type(args))
     return args
-
-def run_nn3(work_queue, done_queue):
-    try:
-        for f in iter(work_queue.get, 'STOP'):
-            n = classify_with_network3(**f)
-    except Exception:
-        done_queue.put("%s failed" % current_process().name)
-
 
 def run_nn2(work_queue, done_queue):
     try:
@@ -66,11 +49,10 @@ def run_nn2(work_queue, done_queue):
     except Exception:
         done_queue.put("%s failed" % current_process().name)
 
-
 def main(args):
     args = parse_args()
 
-    config = cPickle.load(open(args.config, 'r'))
+    config = pickle.load(open(args.config, 'rb'))
 
     try:
             extra_args = config['extra_args']
@@ -80,54 +62,44 @@ def main(args):
             batch_size = args.batch_size
 
     assert(batch_size is not None), "You need to specify batch_size with a flag or have it in the config file"
-#NEED TO ADD CONFIG FILE!#######
+
     start_message = """
 #    Starting Neural Net analysis for {title}
 #    Command line: {cmd}
-#    Config file: N/A
-#    Importing models from {models}
-#    Looking at {nbFiles} files.
-#    Using events from strand {strand}
+#    Config file: {config}
 #    Network type: {type}
 #    Network dims: {dims}
+#    Importing models from {models}
 #    Learning algorithm: {algo}
-#    Collecting {nb_events} events per reference position.
 #    Batch size: {batch}
-#    Non-default feature set: {feature_set}
 #    Iterations: {iter}.
 #    Epochs: {epochs}
 #    Data pre-processing: {center}
 #    Train/test split: {train_test}
 #    L1 reg: {L1}
 #    L2 reg: {L2}
-#    Output to: {out}""".format(nbFiles=args.nb_files, strand=args.strand, iter=args.iter,
+#    Output to: {out}""".format(iter=args.iter,
                                 train_test=args.split, out=args.out, epochs=args.epochs, center=args.preprocess,
                                 L1=args.L1, L2=args.L2, type=config['model_type'], dims=config['hidden_dim'],
-                                nb_events=args.events,cmd=" ".join(sys.argv[:]), title=config['experiment_name'],
+                                cmd=" ".join(sys.argv[:]), title=config["experiment_name"],
                                 batch=batch_size, algo=args.learning_algo, models=args.model_file,
-                                feature_set=args.features, config=args.config)
-
-    print >> sys.stdout, start_message
+                                config=args.config)
+#
+#
+    print (sys.stdout, start_message)
     workers = args.jobs
     work_queue = Manager().Queue()
     done_queue = Manager().Queue()
     jobs = []
 
-    for experiment in config['sites']:
+    for experiment in range(len(config['helixdict'])):
         nn_args = {
-            "group_1": args.group_1,
-            "group_2": args.group_2,
-            "group_3": args.group_3,
-            "motif_start_positions": experiment['motif_start_position'],
             "preprocess": args.preprocess,
-            "events_per_pos": args.events,
-            "feature_set": args.features,
-            "title": experiment['title'],
+            "title": config["helixdict"][experiment]['title'],
             "learning_algorithm": args.learning_algo,
             "train_test_split": args.split,
             "iterations": args.iter,
             "epochs": args.epochs,
-            "max_samples": args.nb_files,
             "batch_size": batch_size,
             "learning_rate": args.learning_rate,
             "L1_reg": args.L1,
@@ -137,26 +109,28 @@ def main(args):
             "model_dir": args.model_file,
             "extra_args": extra_args,
             "out_path": args.out,
+            "helixdict": config['helixdict'][experiment],
         }
-        #classify_with_network3(**nn_args)  # activate for debugging
+        #classify_with_network2(**nn_args)  # activate for debugging
         work_queue.put(nn_args)
 
     for w in range(workers):
-        if args.group_3 is None:
-            p = Process(target=run_nn2, args=(work_queue, done_queue))
-        else:
-            p = Process(target=run_nn3, args=(work_queue, done_queue))
+        #if args.group_3 is None:
+        p = Process(target=run_nn2, args=(work_queue, done_queue))
+        #else:
+            #p = Process(target=run_nn3, args=(work_queue, done_queue))
         p.start()
         jobs.append(p)
         work_queue.put('STOP')
+
 
     for p in jobs:
         p.join()
 
     done_queue.put('STOP')
 
-    print >> sys.stderr, "\n\tFinished Neural Net"
-    print >> sys.stdout, "\n\tFinished Neural Net"
+    print (sys.stderr, "\n\tFinished Neural Net")
+    print (sys.stdout, "\n\tFinished Neural Net")
 
 
 if __name__ == "__main__":

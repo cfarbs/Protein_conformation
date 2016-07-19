@@ -63,7 +63,7 @@ def classify_with_network3(
         # alignment files
         group_1, group_2, group_3,  # these arguments should be strings that are used as the file suffix
         # which data to use
-        motif_start_positions, preprocess, events_per_pos, feature_set, title,
+        motif_start_positions, preprocess, title,
         # training params
         learning_algorithm, train_test_split, iterations, epochs, max_samples, batch_size,
         # model params
@@ -82,10 +82,8 @@ def classify_with_network3(
     scores = []
 
     collect_data_vectors_args = {
-        "events_per_pos": events_per_pos,
         "portion": train_test_split,
         "max_samples": max_samples,
-        "feature_set": feature_set,
     }
 
     for i in range(iterations):
@@ -209,7 +207,7 @@ def classify_with_network2(
         # alignment files
         group_1, group_2, group_3,
         # which data to use
-        motif_start_positions, preprocess, events_per_pos, feature_set, title,
+        motif_start_positions, preprocess, title,
         # training params
         learning_algorithm, train_test_split, iterations, epochs, max_samples, batch_size,
         # model params
@@ -229,11 +227,8 @@ def classify_with_network2(
     scores = []
 
     collect_data_vectors_args = {
-        "events_per_pos": events_per_pos,
         "portion": train_test_split,
         "max_samples": max_samples,
-        "feature_set": feature_set,
-        "kmer_length": 6
     }
 
     for i in range(iterations):
@@ -331,7 +326,7 @@ def classify_with_network2(
 def test_error_distribution3(# alignment files
         group_1, group_2, group_3,  # these arguments should be strings that are used as the file suffix
         # which data to use
-        motif_start_positions, preprocess, events_per_pos, feature_set, title,
+        motif_start_positions, preprocess, title,
         # training params
         learning_algorithm, train_test_split, iterations, epochs, max_samples, batch_size,
         # model params
@@ -350,11 +345,8 @@ def test_error_distribution3(# alignment files
     add_to_list = list_of_datasets.append
 
     collect_data_vectors_args = {
-        "events_per_pos": events_per_pos,
         "portion": train_test_split,
         "max_samples": max_samples,
-        "feature_set": feature_set,
-        "kmer_length": 6,
         "split_dataset": False,
     }
     # makes a list of tuples [(dataset_1, labels_1),..., (dataset_3, labels_3)] for group 1-3
