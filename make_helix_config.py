@@ -22,25 +22,6 @@ for m in range(10):
     d['args'] = False
     j['helixdict'].append(d)
 pickle.dump(j,open("config/defaultrandom.pkl",'wb'))
-###################################################
-
-###################################################
-j = {
-    "experiment_name": "Amine, hydrogens, lost area",
-    "hidden_dim": [10],
-    "model_type": "twoLayer",
-    "helixdict" : dict([('choose',[3,6,13]),('rand',False),('args',True)])
-}
-pickle.dump(j,open("config/aminehydrolost.pkl",'wb'))
-
-###################################################
-j = {
-    "experiment_name": "Hydrogens",
-    "hidden_dim": [10],
-    "model_type": "twoLayer",
-    "helixdict" : dict([('choose',[6]),('rand',False),('args',True)])
-}
-pickle.dump(j,open("config/hydro.pkl",'wb'))
 
 ###################################################
 j = {
